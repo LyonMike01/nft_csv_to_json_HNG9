@@ -55,6 +55,7 @@ fs.createReadStream(filePath)
     records.push(headerRow);
   })
   .on("data", (row) => {
+    // Resolve team name
     const temp = row["TEAM NAMES"] ?? "";
     if (temp.toLowerCase().startsWith("team")) {
       currentTeamName = temp;
@@ -136,7 +137,11 @@ fs.createReadStream(filePath)
       fs.writeFileSync(`${outputDir}/${nft["Filename"]}.json`, stringifiedJson);
 
       // Store the hash and the record to our list
-      nft["Hash"] = hashedJson;
+      records.forEach((row) => {
+        if (row["UUID"] === nft["UUID"]) {
+          row["Hash"] = hashedJson;
+        }
+      });
     });
 
     // Write the CSV
