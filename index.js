@@ -55,7 +55,7 @@ fs.createReadStream(filePath)
     records.push(headerRow);
   })
   .on("data", (row) => {
-    const temp = row["Series Number"] ?? "";
+    const temp = row["TEAM NAMES"] ?? "";
     if (temp.toLowerCase().startsWith("team")) {
       currentTeamName = temp;
     }
@@ -100,7 +100,7 @@ fs.createReadStream(filePath)
 
       // Add more attributes field if available
       if (nft["Attributes"]) {
-        nft["Attributes"].split(",").forEach((attribute) => {
+        nft["Attributes"].split(";").forEach((attribute) => {
           if (attribute) {
             try {
               const values = attribute.split(":");
@@ -115,7 +115,7 @@ fs.createReadStream(filePath)
               // this was most likely caused by bad input
               console.log(
                 "Invalid attribute format:",
-                attribute,
+                `"${attribute}"`,
                 "of NFT:",
                 nft
               );
